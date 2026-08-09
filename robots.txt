@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://naqashnaseeb14.github.io/Troven/sitemap.xml
