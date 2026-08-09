@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TROVEN | Proven Results. Treasured Brands.</title>
+<meta name="description" content="TROVEN is a social media and growth agency for real estate, e-commerce and professional service brands across the US, Canada and UK.">
+<link rel="icon" href="assets/troven-mark-transparent.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0A0A0A;
+    --charcoal:#151515;
+    --charcoal-2:#1D1D1D;
+    --grey:#8C8C8C;
+    --off-white:#F2F2F2;
+    --white:#FFFFFF;
+    --signal:#1F8A7C;
+    --signal-bright:#2FC2AF;
+    --line: rgba(242,242,242,0.10);
+    --display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+    --body: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--off-white);
+    font-family:var(--body);
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  ::selection{ background:var(--signal); color:var(--black); }
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+
+  h1,h2,h3{
+    font-family:var(--display);
+    font-weight:400;
+    letter-spacing:0.01em;
+    line-height:0.95;
+    text-transform:uppercase;
+  }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--grey);
+  }
+
+  .signal-line{ height:2px; width:64px; background:var(--signal-bright); display:block; }
+  .signal-line.center{ margin-left:auto; margin-right:auto; }
+
+  .signal-draw{
+    height:2px; width:100%; background:var(--signal-bright);
+    transform-origin:left; transform:scaleX(0);
+    transition:transform 1.1s cubic-bezier(.16,.84,.44,1);
+  }
+  .signal-draw.in-view{ transform:scaleX(1); }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(10,10,10,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{ display:flex; align-items:center; justify-content:space-between; height:72px; }
+  .brand-mark{ display:flex; align-items:center; gap:10px; }
+  .brand-mark img{ height:22px; width:auto; }
+  .brand-mark span{ font-family:var(--display); font-size:20px; letter-spacing:0.06em; }
+  nav ul{ list-style:none; display:flex; gap:36px; }
+  nav a{
+    font-size:13px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--off-white); position:relative; padding-bottom:4px;
+  }
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--signal-bright); transition:width .3s ease;
+  }
+  nav a:hover::after{ width:100%; }
+  .nav-links{ display:flex; }
+  .nav-cta{
+    border:1px solid rgba(242,242,242,0.3); padding:9px 18px; font-size:12px;
+    letter-spacing:0.08em; text-transform:uppercase; font-weight:600; transition:all .25s ease;
+  }
+  .nav-cta:hover{ background:var(--off-white); color:var(--black); border-color:var(--off-white); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+    padding-top:120px; padding-bottom:80px; position:relative;
+  }
+  .hero-bg-grid{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(242,242,242,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(242,242,242,0.035) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, black 10%, transparent 75%);
+    pointer-events:none;
+  }
+  .hero-ghost-mark{
+    position:absolute;
+    top:50%; right:-4%;
+    width:min(46vw, 620px);
+    transform:translateY(-50%);
+    opacity:0.05;
+    pointer-events:none;
+    will-change:transform;
+    transition:transform .2s ease-out;
+    z-index:0;
+  }
+  .hero-inner{ position:relative; z-index:1; }
+  .hero .eyebrow{ margin-bottom:22px; opacity:0; animation:riseIn .8s ease forwards .1s; }
+  .hero h1{
+    font-size:clamp(64px, 13vw, 168px); color:var(--white);
+    opacity:0; animation:riseIn .9s ease forwards .25s;
+  }
+  .hero .tagline{
+    font-family:var(--display); font-size:clamp(20px, 2.6vw, 30px); letter-spacing:0.04em;
+    text-transform:uppercase; color:var(--off-white); margin-top:18px;
+    opacity:0; animation:riseIn .9s ease forwards .45s;
+  }
+  .hero-signal{ margin-top:26px; max-width:520px; opacity:0; animation:riseIn .9s ease forwards .6s; }
+  .hero p.lede{
+    margin-top:26px; max-width:520px; font-size:17px; color:var(--grey);
+    opacity:0; animation:riseIn .9s ease forwards .75s;
+  }
+  .hero-actions{
+    margin-top:40px; display:flex; gap:16px; flex-wrap:wrap;
+    opacity:0; animation:riseIn .9s ease forwards .9s;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:10px; padding:16px 30px; font-size:13px;
+    font-weight:600; letter-spacing:0.08em; text-transform:uppercase; transition:all .25s ease;
+    border:1px solid transparent;
+  }
+  .btn-primary{ background:var(--off-white); color:var(--black); }
+  .btn-primary:hover{ background:var(--signal-bright); }
+  .btn-ghost{ border-color:rgba(242,242,242,0.3); color:var(--off-white); }
+  .btn-ghost:hover{ border-color:var(--off-white); }
+
+  @keyframes riseIn{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:translateY(0); } }
+
+  .scroll-cue{
+    position:absolute; bottom:40px; left:32px; display:flex; align-items:center; gap:10px;
+    font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--grey); z-index:1;
+  }
+  .scroll-cue .dash{ width:28px; height:1px; background:var(--grey); animation:pulseDash 2.4s ease-in-out infinite; }
+  @keyframes pulseDash{ 0%,100%{ width:28px; opacity:.6; } 50%{ width:44px; opacity:1; } }
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{ padding:120px 0; position:relative; }
+  .section-head{ margin-bottom:64px; max-width:640px; }
+  .section-head .eyebrow{ margin-bottom:16px; }
+  .section-head h2{ font-size:clamp(36px, 5vw, 58px); color:var(--white); }
+  .section-head p{ margin-top:20px; color:var(--grey); font-size:16px; max-width:520px; }
+
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s ease, transform .8s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  /* ---------- PHILOSOPHY ---------- */
+  .philosophy{ background:var(--charcoal); }
+  .philosophy-grid{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
+  .philosophy blockquote{
+    font-family:var(--display); font-size:clamp(28px, 3.4vw, 42px); line-height:1.15;
+    color:var(--white); text-transform:none; letter-spacing:0.005em;
+  }
+  .philosophy blockquote span{ color:var(--signal-bright); }
+  .philosophy .word-defs{ display:flex; flex-direction:column; gap:28px; }
+  .word-def{ border-left:2px solid var(--signal); padding-left:20px; }
+  .word-def .term{ font-family:var(--display); font-size:26px; letter-spacing:0.05em; color:var(--white); }
+  .word-def p{ color:var(--grey); font-size:15px; margin-top:6px; }
+
+  /* ---------- SERVICES : capability index (not a box grid) ---------- */
+  .cap-index{ border-top:1px solid var(--line); }
+  .cap-row{
+    display:grid;
+    grid-template-columns:110px 1fr 40px;
+    align-items:center;
+    gap:24px;
+    padding:30px 4px;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+    perspective:1000px;
+    transition:background .35s ease;
+  }
+  .cap-row:hover{ background:rgba(242,242,242,0.02); }
+  .cap-row .cap-num{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--signal-bright);
+    letter-spacing:0.05em;
+  }
+  .cap-row .cap-main{
+    transform-origin:left center;
+    transition:transform .4s cubic-bezier(.2,.8,.3,1);
+  }
+  .cap-row:hover .cap-main{ transform:rotateX(-2deg) translateX(6px); }
+  .cap-row h3{
+    font-size:26px; text-transform:none; letter-spacing:0.005em; color:var(--white);
+    font-family:var(--body); font-weight:600;
+  }
+  .cap-row .cap-desc{
+    color:var(--grey); font-size:14.5px; margin-top:0;
+    max-height:0; overflow:hidden; opacity:0;
+    transition:max-height .4s ease, opacity .4s ease, margin-top .4s ease;
+  }
+  .cap-row:hover .cap-desc, .cap-row.open .cap-desc{
+    max-height:60px; opacity:1; margin-top:8px;
+  }
+  .cap-row .cap-arrow{
+    font-family:var(--mono);
+    color:var(--grey);
+    font-size:18px;
+    text-align:right;
+    transition:transform .35s ease, color .35s ease;
+  }
+  .cap-row:hover .cap-arrow{ transform:translateX(4px) rotate(45deg); color:var(--signal-bright); }
+
+  /* ---------- CASE FILES (proof) : dossier stamp cards ---------- */
+  .proof{ background:var(--charcoal); overflow:visible; }
+  .files-stack{
+    display:flex; flex-direction:column; gap:0;
+  }
+  .file-card{
+    position:relative;
+    border:1px solid var(--line);
+    background:var(--charcoal-2);
+    padding:30px 32px;
+    margin-bottom:18px;
+    transform:rotate(var(--tilt, 0deg));
+    transition:transform .35s ease, border-color .35s ease;
+  }
+  .file-card:nth-child(odd){ --tilt:-0.35deg; }
+  .file-card:nth-child(even){ --tilt:0.3deg; }
+  .file-card:hover{ transform:rotate(0deg) translateY(-4px); border-color:rgba(242,242,242,0.25); }
+  .file-top{
+    display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  }
+  .file-sector{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--grey);
+  }
+  .stamp{
+    font-family:var(--mono);
+    font-size:10.5px;
+    font-weight:500;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    border:1px solid var(--signal-bright);
+    color:var(--signal-bright);
+    padding:5px 10px;
+    transform:rotate(-3deg);
+    white-space:nowrap;
+  }
+  .stamp.live{ border-color:var(--white); color:var(--white); display:inline-flex; align-items:center; gap:7px; }
+  .pulse-dot{
+    width:7px; height:7px; border-radius:50%; background:var(--signal-bright);
+    box-shadow:0 0 0 0 rgba(47,194,175,0.6);
+    animation:pulseDot 2s infinite;
+  }
+  @keyframes pulseDot{
+    0%{ box-shadow:0 0 0 0 rgba(47,194,175,0.55); }
+    70%{ box-shadow:0 0 0 7px rgba(47,194,175,0); }
+    100%{ box-shadow:0 0 0 0 rgba(47,194,175,0); }
+  }
+  .file-line{
+    margin-top:16px;
+    font-size:17px;
+    color:var(--off-white);
+    max-width:760px;
+  }
+  .file-sub{
+    margin-top:8px;
+    font-size:14px;
+    color:var(--grey);
+    max-width:720px;
+  }
+  .flagship{ border-color:rgba(242,242,242,0.3); background:var(--black); }
+  .flagship .file-line{ font-size:19px; }
+  .breadth-note{
+    margin-top:28px;
+    font-size:14px;
+    color:var(--grey);
+    border-top:1px solid var(--line);
+    padding-top:24px;
+  }
+  .breadth-note b{ color:var(--off-white); font-weight:600; }
+
+  /* ---------- WHO WE WORK WITH : alternating rows with ghost numerals ---------- */
+  .icp-list{ display:flex; flex-direction:column; }
+  .icp-row{
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:center;
+    padding:56px 0;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .icp-row:first-child{ border-top:1px solid var(--line); }
+  .icp-ghost{
+    position:absolute;
+    top:50%; transform:translateY(-50%);
+    font-family:var(--display);
+    font-size:clamp(120px, 16vw, 220px);
+    color:transparent;
+    -webkit-text-stroke:1px rgba(242,242,242,0.08);
+    line-height:1;
+    z-index:0;
+    pointer-events:none;
+  }
+  .icp-row:nth-child(odd) .icp-ghost{ right:-2%; }
+  .icp-row:nth-child(even) .icp-ghost{ left:-2%; }
+  .icp-row:nth-child(even){ direction:rtl; }
+  .icp-row:nth-child(even) .icp-content{ direction:ltr; }
+  .icp-content{ position:relative; z-index:1; }
+  .icp-tier{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--signal-bright); font-weight:500;
+  }
+  .icp-row h3{
+    margin-top:14px; font-size:clamp(28px, 3.4vw, 40px); color:var(--white);
+    text-transform:none; font-family:var(--body); font-weight:600; line-height:1.1;
+  }
+  .icp-row p{ color:var(--grey); font-size:15px; margin-top:14px; max-width:400px; }
+  .icp-markets{ margin-top:20px; display:flex; gap:8px; flex-wrap:wrap; position:relative; z-index:1; }
+  .icp-markets span{
+    font-size:11px; letter-spacing:0.06em; text-transform:uppercase;
+    border:1px solid rgba(242,242,242,0.2); padding:5px 10px; color:var(--grey);
+  }
+
+  /* ---------- PROCESS ---------- */
+  .process-track{ display:grid; grid-template-columns:repeat(5, 1fr); gap:24px; }
+  .process-step{ padding-top:24px; border-top:2px solid var(--signal); }
+  .process-step .step-num{ font-family:var(--mono); font-size:13px; color:var(--grey); }
+  .process-step h3{
+    margin-top:14px; font-size:20px; text-transform:none; font-family:var(--body);
+    font-weight:600; color:var(--white);
+  }
+  .process-step p{ margin-top:8px; font-size:14px; color:var(--grey); }
+
+  /* ---------- VALUES : marquee + compact list ---------- */
+  .values{ background:var(--charcoal); }
+  .marquee{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+    white-space:nowrap;
+    padding:22px 0;
+    margin-bottom:56px;
+  }
+  .marquee-track{
+    display:inline-block;
+    animation:marquee 26s linear infinite;
+  }
+  .marquee-track span{
+    font-family:var(--display);
+    font-size:32px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:var(--off-white);
+    margin-right:28px;
+  }
+  .marquee-track span.dot{ color:var(--signal-bright); font-family:var(--body); }
+  @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  .values-list{ display:flex; flex-direction:column; }
+  .values-row{
+    display:grid; grid-template-columns:260px 1fr; gap:24px;
+    padding:22px 0; border-bottom:1px solid var(--line);
+  }
+  .values-row:first-child{ border-top:1px solid var(--line); }
+  .values-row h3{ font-size:17px; text-transform:none; color:var(--white); font-family:var(--body); font-weight:600; }
+  .values-row p{ font-size:14.5px; color:var(--grey); }
+
+  /* ---------- CTA / FOOTER ---------- */
+  .cta{ text-align:center; padding:160px 0 120px; }
+  .cta h2{ font-size:clamp(44px, 8vw, 96px); color:var(--white); }
+  .cta p{ margin:24px auto 0; max-width:480px; color:var(--grey); font-size:16px; }
+  .cta .btn-primary{ margin-top:40px; }
+
+  footer{ border-top:1px solid var(--line); padding:48px 0; }
+  .footer-inner{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px; }
+  .footer-brand{ display:flex; align-items:center; gap:10px; }
+  .footer-brand img{ height:16px; }
+  .footer-brand span{ font-family:var(--display); font-size:15px; letter-spacing:0.06em; color:var(--grey); }
+  .footer-meta{ font-size:12.5px; color:var(--grey); display:flex; gap:28px; flex-wrap:wrap; }
+  .footer-meta a:hover{ color:var(--off-white); }
+
+  /* ---------- CREDIBILITY STRIP ---------- */
+  .cred-strip{
+    padding:26px 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--black);
+  }
+  .cred-strip .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:14px;
+    row-gap:10px;
+  }
+  .cred-strip .cred-label{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--grey);
+    margin-right:8px;
+  }
+  .cred-strip .cred-item{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--off-white);
+    opacity:0.75;
+  }
+  .cred-strip .cred-sep{ color:var(--signal-bright); opacity:0.7; }
+
+  /* ---------- FAQ ---------- */
+  .faq-list{ display:flex; flex-direction:column; }
+  .faq-row{
+    border-bottom:1px solid var(--line);
+    padding:26px 0;
+    cursor:pointer;
+  }
+  .faq-row:first-child{ border-top:1px solid var(--line); }
+  .faq-q{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+  }
+  .faq-q h3{
+    font-size:18px; text-transform:none; color:var(--white);
+    font-family:var(--body); font-weight:600;
+  }
+  .faq-toggle{
+    font-family:var(--mono); font-size:18px; color:var(--grey);
+    transition:transform .3s ease, color .3s ease;
+    flex-shrink:0;
+  }
+  .faq-row.open .faq-toggle{ transform:rotate(45deg); color:var(--signal-bright); }
+  .faq-a{
+    max-height:0; overflow:hidden; opacity:0;
+    transition:max-height .4s ease, opacity .4s ease, margin-top .4s ease;
+    font-size:14.5px; color:var(--grey); max-width:640px;
+  }
+  .faq-row.open .faq-a{ max-height:200px; opacity:1; margin-top:14px; }
+
+  /* ---------- SOCIAL ROW ---------- */
+  .social-row{ display:flex; align-items:center; gap:16px; }
+  .social-row a{
+    width:34px; height:34px;
+    border:1px solid rgba(242,242,242,0.18);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--grey);
+    transition:all .25s ease;
+  }
+  .social-row a:hover{ border-color:var(--signal-bright); color:var(--signal-bright); transform:translateY(-2px); }
+  .social-row svg{ width:15px; height:15px; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .philosophy-grid{ grid-template-columns:1fr; gap:40px; }
+    .icp-row{ grid-template-columns:1fr; }
+    .icp-row:nth-child(even){ direction:ltr; }
+    .icp-ghost{ display:none; }
+    .process-track{ grid-template-columns:repeat(2, 1fr); }
+    .values-row{ grid-template-columns:1fr; gap:6px; }
+    .nav-links{ display:none; }
+    .cap-row{ grid-template-columns:60px 1fr 30px; }
+    .hero-ghost-mark{ opacity:0.04; width:70vw; }
+    .cred-strip .cred-label{ width:100%; text-align:center; margin-right:0; margin-bottom:4px; }
+  }
+  @media (max-width:560px){
+    .process-track{ grid-template-columns:1fr; }
+    .wrap{ padding:0 22px; }
+    section{ padding:88px 0; }
+    .file-top{ flex-direction:column; align-items:flex-start; gap:12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="brand-mark">
+      <img src="assets/troven-mark-transparent.png" alt="TROVEN mark">
+      <span>TROVEN</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#proof">Proof</a></li>
+      <li><a href="#process">Process</a></li>
+    </ul>
+    <a class="nav-cta" href="mailto:hellotroven@gmail.com">Start a conversation</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-grid"></div>
+    <img src="assets/troven-mark-transparent.png" alt="" class="hero-ghost-mark" id="ghostMark">
+    <div class="wrap hero-inner">
+      <p class="eyebrow">Premium social media &amp; growth agency</p>
+      <h1>TROVEN</h1>
+      <p class="tagline">Proven Results. Treasured Brands.</p>
+      <div class="hero-signal"><span class="signal-draw" data-signal></span></div>
+      <p class="lede">We do not sell hope. We build a documented, growing collection of evidence that your marketing is working, then we show you every piece of it.</p>
+      <div class="hero-actions">
+        <a href="mailto:hellotroven@gmail.com" class="btn btn-primary">Start a conversation</a>
+        <a href="#work" class="btn btn-ghost">See what we do</a>
+      </div>
+    </div>
+    <div class="scroll-cue"><span class="dash"></span> Scroll</div>
+  </section>
+
+  <!-- CREDIBILITY STRIP -->
+  <div class="cred-strip">
+    <div class="wrap">
+      <span class="cred-label">Worked across</span>
+      <span class="cred-item">Real Estate</span><span class="cred-sep">/</span>
+      <span class="cred-item">Healthcare</span><span class="cred-sep">/</span>
+      <span class="cred-item">Hospitality</span><span class="cred-sep">/</span>
+      <span class="cred-item">B2B Industrial</span><span class="cred-sep">/</span>
+      <span class="cred-item">Consumer &amp; Retail</span>
+    </div>
+  </div>
+
+  <!-- PHILOSOPHY / MEANING -->
+  <section class="philosophy" id="work">
+    <div class="wrap">
+      <div class="philosophy-grid">
+        <div class="reveal">
+          <p class="eyebrow" style="margin-bottom:20px;">Where the name comes from</p>
+          <blockquote>We build a <span>treasure trove</span> of evidence that your brand is growing, not another promise to take on faith.</blockquote>
+        </div>
+        <div class="word-defs reveal">
+          <div class="word-def">
+            <div class="term">TROVE</div>
+            <p>A collection of things that are rare and worth having.</p>
+          </div>
+          <div class="word-def">
+            <div class="term">PROVEN</div>
+            <p>Documented, checked, and measurable. Not assumed.</p>
+          </div>
+          <div class="word-def">
+            <div class="term">TROVEN</div>
+            <p>A proven collection of results, built one campaign at a time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES : Capability Index -->
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">What we do</p>
+        <h2>The capability index</h2>
+        <p>Most agencies hand you off between three vendors to get one brand built properly. We keep it under one roof. Hover a line to open it.</p>
+      </div>
+      <div class="cap-index reveal">
+        <div class="cap-row">
+          <span class="cap-num">/ 01</span>
+          <div class="cap-main">
+            <h3>Social media management</h3>
+            <p class="cap-desc">Your channels run daily, with a plan behind every post, not a calendar filled in at random.</p>
+          </div>
+          <span class="cap-arrow">↗</span>
+        </div>
+        <div class="cap-row">
+          <span class="cap-num">/ 02</span>
+          <div class="cap-main">
+            <h3>Paid advertising</h3>
+            <p class="cap-desc">Campaigns built to bring in leads, tracked and tested until the numbers make sense.</p>
+          </div>
+          <span class="cap-arrow">↗</span>
+        </div>
+        <div class="cap-row">
+          <span class="cap-num">/ 03</span>
+          <div class="cap-main">
+            <h3>Brand positioning</h3>
+            <p class="cap-desc">A clear, specific place in your market, so people know exactly what you stand for.</p>
+          </div>
+          <span class="cap-arrow">↗</span>
+        </div>
+        <div class="cap-row">
+          <span class="cap-num">/ 04</span>
+          <div class="cap-main">
+            <h3>Website development</h3>
+            <p class="cap-desc">A site built to hold up under real traffic and turn visitors into people who reach out.</p>
+          </div>
+          <span class="cap-arrow">↗</span>
+        </div>
+        <div class="cap-row">
+          <span class="cap-num">/ 05</span>
+          <div class="cap-main">
+            <h3>SEO</h3>
+            <p class="cap-desc">Getting found by people who are already searching for what you offer, not chasing them down.</p>
+          </div>
+          <span class="cap-arrow">↗</span>
+        </div>
+        <div class="cap-row">
+          <span class="cap-num">/ 06</span>
+          <div class="cap-main">
+            <h3>AI automation</h3>
+            <p class="cap-desc">The repetitive parts of reporting and follow up, handled quietly in the background.</p>
+          </div>
+          <span class="cap-arrow">↗</span>
+        </div>
+        <div class="cap-row">
+          <span class="cap-num">/ 07</span>
+          <div class="cap-main">
+            <h3>Community management</h3>
+            <p class="cap-desc">Real replies from real people, on every channel, every time someone reaches out.</p>
+          </div>
+          <span class="cap-arrow">↗</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASE FILES (proof) -->
+  <section class="proof" id="proof">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Documented, not promised</p>
+        <h2>Case files</h2>
+        <p>Most of the names stay private, the way an NDA requires. What each brand actually needed, and what we built for it, does not.</p>
+      </div>
+
+      <div class="files-stack reveal">
+
+        <div class="file-card flagship">
+          <div class="file-top">
+            <span class="file-sector">Real estate · Land Pakistan</span>
+            <span class="stamp live"><span class="pulse-dot"></span>Live &amp; named</span>
+          </div>
+          <p class="file-line">Currently running Land Pakistan's full social presence across Instagram, Facebook, TikTok, and LinkedIn.</p>
+          <p class="file-sub">Posting stays deliberately paced so the account builds trust rather than reading like a listings feed. This one is not anonymised. Look it up directly and see the work as it happens.</p>
+        </div>
+
+        <div class="file-card">
+          <div class="file-top">
+            <span class="file-sector">B2B industrial · Elevator manufacturer</span>
+            <span class="stamp">NDA · Documented</span>
+          </div>
+          <p class="file-line">Built a B2B industrial brand's entire social presence from zero, with no local playbook to copy, then turned it into a lead generating ad system run start to finish.</p>
+          <p class="file-sub">Organic search visibility reached the top of Instagram and Facebook results within three months, before any ad spend was involved.</p>
+        </div>
+
+        <div class="file-card">
+          <div class="file-top">
+            <span class="file-sector">Healthcare · Dental &amp; aesthetic clinic</span>
+            <span class="stamp">NDA · Documented</span>
+          </div>
+          <p class="file-line">Revived a page that had sat untouched for a year, in a category where every post needs medical sign off, without slowing the calendar down.</p>
+          <p class="file-sub">Produced the clinic's introductory video, testimonial included, and used it as the template for everything that followed.</p>
+        </div>
+
+        <div class="file-card">
+          <div class="file-top">
+            <span class="file-sector">Hospitality · Boutique hotel</span>
+            <span class="stamp">NDA · Documented</span>
+          </div>
+          <p class="file-line">Shaped a boutique hotel's content around how a space feels before a guest ever walks in, mood and detail carrying the story instead of a sales pitch.</p>
+        </div>
+
+        <div class="file-card">
+          <div class="file-top">
+            <span class="file-sector">Consumer · Fragrance brand, TikTok</span>
+            <span class="stamp">NDA · Documented</span>
+          </div>
+          <p class="file-line">Took a fragrance brand's TikTok from a blank account to consistent organic discovery, almost entirely through the platform's own For You feed.</p>
+        </div>
+
+        <div class="file-card">
+          <div class="file-top">
+            <span class="file-sector">Real time content · Sports interest page</span>
+            <span class="stamp">Documented</span>
+          </div>
+          <p class="file-line">Turned a live cricket announcement into a genuine organic spike within the hour, twice, by moving faster than a pre-planned calendar ever could.</p>
+        </div>
+
+      </div>
+
+      <p class="breadth-note reveal">Also active across <b>real estate consulting</b>, <b>gated community developments</b>, <b>US medical billing</b>, and <b>restaurant guest relations</b>. Different industries, same proof-first process.</p>
+    </div>
+  </section>
+
+  <!-- WHO WE WORK WITH -->
+  <section>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Who we work with</p>
+        <h2>Brands with something to protect</h2>
+        <p>We take on a small number of clients at a time, on purpose. Every account gets treated like an internal brand, not a line item.</p>
+      </div>
+      <div class="icp-list reveal">
+        <div class="icp-row">
+          <span class="icp-ghost">01</span>
+          <div class="icp-content">
+            <div class="icp-tier">Primary</div>
+            <h3>Real estate agents and developers</h3>
+            <p>High marketing spend, strong social dependence, and a proven need for consistent lead generation.</p>
+            <div class="icp-markets"><span>USA</span><span>Canada</span><span>UK</span></div>
+          </div>
+        </div>
+        <div class="icp-row">
+          <span class="icp-ghost">02</span>
+          <div class="icp-content">
+            <div class="icp-tier">Secondary</div>
+            <h3>E-commerce brands</h3>
+            <p>Fashion, home, skincare, and lifestyle brands that sell direct to their own customers.</p>
+            <div class="icp-markets"><span>USA</span><span>Canada</span><span>UK</span></div>
+          </div>
+        </div>
+        <div class="icp-row">
+          <span class="icp-ghost">03</span>
+          <div class="icp-content">
+            <div class="icp-tier">Tertiary</div>
+            <h3>Professional services</h3>
+            <p>Clinics, law firms, and financial advisors who need a steady, credible presence over time.</p>
+            <div class="icp-markets"><span>USA</span><span>Canada</span><span>UK</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">How it runs</p>
+        <h2>Five steps, every month</h2>
+        <p>The same order, every time, so nothing depends on memory or luck.</p>
+      </div>
+      <div class="process-track reveal">
+        <div class="process-step">
+          <div class="step-num">/ 01</div>
+          <h3>Discovery</h3>
+          <p>We learn your brand, your audience, your competitors, and what you're actually trying to achieve.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">/ 02</div>
+          <h3>Strategy</h3>
+          <p>A content direction and growth plan built around your goals, not a generic template.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">/ 03</div>
+          <h3>Production</h3>
+          <p>Graphics, captions, and campaigns get made, checked, and approved.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">/ 04</div>
+          <h3>Publishing</h3>
+          <p>Everything goes live on schedule, then gets watched and adjusted as it runs.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">/ 05</div>
+          <h3>Reporting</h3>
+          <p>A clear report on reach, engagement, and what we're doing differently next month.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="values">
+    <div class="marquee reveal">
+      <div class="marquee-track">
+        <span>PROOF OVER PROMISE</span><span class="dot">•</span>
+        <span>TRANSPARENCY</span><span class="dot">•</span>
+        <span>PREMIUM QUALITY</span><span class="dot">•</span>
+        <span>RESPONSIVENESS</span><span class="dot">•</span>
+        <span>OWNERSHIP</span><span class="dot">•</span>
+        <span>EXECUTION OVER THEORY</span><span class="dot">•</span>
+        <span>PROOF OVER PROMISE</span><span class="dot">•</span>
+        <span>TRANSPARENCY</span><span class="dot">•</span>
+        <span>PREMIUM QUALITY</span><span class="dot">•</span>
+        <span>RESPONSIVENESS</span><span class="dot">•</span>
+        <span>OWNERSHIP</span><span class="dot">•</span>
+        <span>EXECUTION OVER THEORY</span><span class="dot">•</span>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="values-list reveal">
+        <div class="values-row">
+          <h3>Proof over promise</h3>
+          <p>Every claim we make is backed by something you can actually check.</p>
+        </div>
+        <div class="values-row">
+          <h3>Transparency</h3>
+          <p>You always know what's being done, why, and what it produced.</p>
+        </div>
+        <div class="values-row">
+          <h3>Premium quality</h3>
+          <p>Every deliverable is held to the same standard, no matter the size of the task.</p>
+        </div>
+        <div class="values-row">
+          <h3>Responsiveness</h3>
+          <p>You hear back within 24 hours. No chasing us down for an update.</p>
+        </div>
+        <div class="values-row">
+          <h3>Ownership</h3>
+          <p>Every account is treated like it's our own brand on the line, not just yours.</p>
+        </div>
+        <div class="values-row">
+          <h3>Execution over theory</h3>
+          <p>An idea only matters once it's actually live and being measured.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Before you reach out</p>
+        <h2>Straight answers</h2>
+        <p>The questions founders and managers actually ask, answered before the call.</p>
+      </div>
+      <div class="faq-list reveal">
+        <div class="faq-row" tabindex="0" role="button" aria-expanded="false">
+          <div class="faq-q"><h3>How fast will we see results?</h3><span class="faq-toggle">+</span></div>
+          <p class="faq-a">Paid campaigns can start generating leads within the first few weeks, once targeting is dialed in. Organic growth and positioning build over the first few months and keep compounding from there.</p>
+        </div>
+        <div class="faq-row" tabindex="0" role="button" aria-expanded="false">
+          <div class="faq-q"><h3>What's the commitment like?</h3><span class="faq-toggle">+</span></div>
+          <p class="faq-a">Monthly retainers, reviewed and adjusted every month. No multi year lock in, and no disappearing after the first invoice.</p>
+        </div>
+        <div class="faq-row" tabindex="0" role="button" aria-expanded="false">
+          <div class="faq-q"><h3>Is our data and strategy kept private?</h3><span class="faq-toggle">+</span></div>
+          <p class="faq-a">Yes. Every client relationship is NDA covered by default. Case studies stay industry labeled unless a client agrees to go public, the way Land Pakistan has.</p>
+        </div>
+        <div class="faq-row" tabindex="0" role="button" aria-expanded="false">
+          <div class="faq-q"><h3>How is this different from hiring a freelancer?</h3><span class="faq-toggle">+</span></div>
+          <p class="faq-a">A freelancer sells hours. We run a full system, strategy, content, ads, and reporting, under one roof, with a process that repeats every month whether or not any single person is available.</p>
+        </div>
+        <div class="faq-row" tabindex="0" role="button" aria-expanded="false">
+          <div class="faq-q"><h3>Which industries do you work best with?</h3><span class="faq-toggle">+</span></div>
+          <p class="faq-a">Real estate, e-commerce, and professional services see the strongest results. All three depend on consistent visibility and buyer trust, which is exactly what the process is built around.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="wrap">
+      <p class="eyebrow">Get in touch</p>
+      <h2 class="reveal">Let's start the trove</h2>
+      <p class="reveal">Tell us about your brand and where growth has stalled. We'll tell you honestly whether we're the right fit before anything else.</p>
+      <a href="mailto:hellotroven@gmail.com" class="btn btn-primary reveal">hellotroven@gmail.com</a>
+      <p class="reveal" style="margin-top:22px; font-size:12.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--grey); font-family:var(--mono);">Now booking a limited number of new accounts this quarter</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <a href="#top" class="footer-brand">
+      <img src="assets/troven-mark-transparent.png" alt="TROVEN mark">
+      <span>TROVEN</span>
+    </a>
+    <div class="footer-meta">
+      <span>Proven Results. Treasured Brands.</span>
+      <a href="mailto:hellotroven@gmail.com">hellotroven@gmail.com</a>
+    </div>
+    <div class="social-row">
+      <a href="https://facebook.com/wearetroven" target="_blank" rel="noopener" aria-label="TROVEN on Facebook">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 8.5h-2c-.8 0-1.5.7-1.5 1.5v2h3.4l-.4 3h-3v7.9h-3.1V15H6.5v-3h2v-2.2c0-2.5 1.6-4.3 4-4.3H15v2.9z"/></svg>
+      </a>
+      <a href="https://instagram.com/wearetroven" target="_blank" rel="noopener" aria-label="TROVEN on Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="0.9" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://linkedin.com/company/wearetroven" target="_blank" rel="noopener" aria-label="TROVEN on LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><line x1="7.5" y1="10.5" x2="7.5" y2="16.5"/><circle cx="7.5" cy="7.3" r="0.9" fill="currentColor" stroke="none"/><path d="M11 16.5v-4c0-1.1.9-2 2-2s2 .9 2 2v4"/><line x1="11" y1="12.6" x2="11" y2="16.5"/></svg>
+      </a>
+      <a href="https://tiktok.com/@wearetroven" target="_blank" rel="noopener" aria-label="TROVEN on TikTok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 4v9.6a3.1 3.1 0 1 1-2.6-3.06V7.4A6.1 6.1 0 1 0 17 13.5v-4.8a6.6 6.6 0 0 0 3.5 1V6.6A4 4 0 0 1 17 3H14z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal, [data-signal]');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+  revealEls.forEach(el => io.observe(el));
+
+  // subtle parallax tilt on the ghost mark, following the pointer
+  const ghost = document.getElementById('ghostMark');
+  const hero = document.querySelector('.hero');
+  if (ghost && hero && matchMedia('(hover: hover)').matches) {
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      ghost.style.transform = `translateY(-50%) translate(${x * -24}px, ${y * -16}px) rotate(${x * 3}deg)`;
+    });
+  }
+
+  // FAQ accordion: click or keyboard to expand/collapse
+  document.querySelectorAll('.faq-row').forEach(row => {
+    const toggle = () => {
+      const isOpen = row.classList.toggle('open');
+      row.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      row.querySelector('.faq-toggle').textContent = isOpen ? '−' : '+';
+    };
+    row.addEventListener('click', toggle);
+    row.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
+</script>
+
+</body>
+</html>
